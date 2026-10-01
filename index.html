@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ระบบตั้งค่าการแจ้งเตือนฝนตก</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 500px; margin: auto; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input, select, button { width: 100%; padding: 10px; box-sizing: border-box; }
+    button { background-color: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; }
+    button:hover { background-color: #0056b3; }
+    .result { margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <h2>ตั้งค่าการแจ้งเตือนฝนตก</h2>
+
+  <div class="form-group">
+    <label for="location">เลือกเขต (ตำบล/อำเภอ/จังหวัด):</label>
+    <select id="location">
+      <option value="ต.กกสะทอน อ.ด่านซ้าย จ.เลย">ต.กกสะทอน อ.ด่านซ้าย จ.เลย</option>
+      <option value="ต.ในเมือง อ.เมือง จ.ขอนแก่น">ต.ในเมือง อ.เมือง จ.ขอนแก่น</option>
+      <option value="ต.คลองเตย เขตคลองเตย จ.กรุงเทพมหานคร">ต.คลองเตย เขตคลองเตย จ.กรุงเทพมหานคร</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="rainChance">โอกาสฝนตก (%):</label>
+    <input type="number" id="rainChance" min="0" max="100" value="70">
+  </div>
+
+  <button onclick="saveSettings()">บันทึกและจำลองการสร้างข้อความแจ้งเตือน</button>
+
+  <div class="result" id="previewBox" style="display:none;">
+    <h3>ข้อความที่จะส่งแจ้งเตือน:</h3>
+    <p id="previewText"></p>
+  </div>
+
+  <script>
+    function saveSettings() {
+      const location = document.getElementById('location').value;
+      const chance = parseInt(document.getElementById('rainChance').value);
+      let message = "";
+
+      if (chance >= 60) {
+        message = `[${location}] วันนี้มีโอกาสฝนตก ${chance}% แนะนำให้พกร่มครับ`;
+      } else {
+        message = `[${location}] วันนี้มีโอกาสฝนตก ${chance}% ไม่ต้องพกร่มไปก็ได้ครับ`;
+      }
+
+      document.getElementById('previewText').innerText = message;
+      document.getElementById('previewBox').style.display = 'block';
+
+      // เซฟลง LocalStorage ของเบราว์เซอร์
+      localStorage.setItem('rain_location', location);
+      localStorage.setItem('rain_chance', chance);
+    }
+  </script>
+
+</body>
+</html>
