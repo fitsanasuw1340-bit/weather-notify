@@ -1,10 +1,10 @@
-name: Daily Rain Notification
+name: Daily Rain Line Notification
 
 on:
   schedule:
-    # รันทุกวันเวลา 00:00 UTC (เท่ากับ 07:00 น. เวลาไทย)
-    - cron: '0 0 * * *'
-  workflow_dispatch: # กดสั่งรันเองจากหน้า GitHub ได้ตลอดเวลา
+    # รันทุกวันเวลา 07:00 น. เวลาไทย (00:00 UTC)
+    - cron: '2 30 * * *'
+  workflow_dispatch: # ปุ่มกดสั่งรันด้วยตนเองบน GitHub
 
 jobs:
   notify:
@@ -23,10 +23,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Run Notification Script
+      - name: Run LINE Notification Script
         env:
           LOCATION: "ต.กกสะทอน อ.ด่านซ้าย จ.เลย"
-          RAIN_CHANCE: "65" # ค่าสมมติ หากเชื่อมต่อ API พยากรณ์อากาศจะดึงค่าจริงให้อัตโนมัติ
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python notify.py
+          RAIN_CHANCE: "65"
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        run: python send_line.py
